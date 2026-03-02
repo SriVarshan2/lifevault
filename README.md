@@ -1,5 +1,7 @@
 # **Life Vault — Your Medical Identity. Always Ready.**
 
+> "In 2024, an estimated 250,000 people die annually in the US from medical errors. A significant subset of these are preventable with basic information — blood type, known allergies, current medications — that first responders simply didn't have access to in time. This is not a technology problem. Every person already carries the solution in their pocket. Life Vault puts critical medical data where it belongs: accessible in under 10 seconds, without an app, without a login, without internet."
+
 **Privacy-First Identity • High-Density Clinical Data • Zero Cloud Storage**
 **Next.js • React • Offline-Ready • 8-Second Assessment**
 
@@ -71,6 +73,30 @@ It is a **life-saving protocol**.
 5. **Emergency Contact (ICE)**: One-tap calling for primary emergency responders.
 
 The user remains the sole owner of their identity.
+
+---
+
+## 🏗️ The "Bridge" Architecture
+
+Life Vault isn't just a website; it’s a **digital-to-physical bridge**. 
+
+While many apps rely on constant connectivity, Life Vault allows users to generate and print a **High-Density QR ID (Clinical Mode)**. This physical backup contains your entire emergency summary in a format that works in hospital basements, rural areas, and disaster zones with **zero internet**. It transforms a piece of paper or a lock-screen sticker into a clinical-grade data terminal.
+
+---
+
+## 🛡️ Proactive vs. Reactive Safety
+
+Most health apps are **reactive**: they store data and wait for you to find it. Life Vault’s **Safety Timer** is **proactive**. 
+
+Whether you're going for a solo run, walking home late, or managing a chronic condition, the Safety Timer watches over you. If you don't check in, Life Vault initiates its emergency protocol automatically—so you don't have to reach for your phone in a crisis. It shifts the burden of safety from the victim to the system.
+
+---
+
+## 🧠 AI Intelligence with "Safe Fallback"
+
+The Life Vault **Triage System** is designed for the high-stakes environment of a hospital basement where APIs fail. 
+
+It uses a **robust rule-based engine first**, meaning it has medical "common sense" baked directly into the local client-side code. While it can leverage AI for complex analysis when online, its core triage logic remains fully functional offline. It’s an intelligent system that never forgets its primary mission just because it lost a signal.
 
 ---
 
