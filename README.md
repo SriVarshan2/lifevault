@@ -11,12 +11,6 @@
   <img src="https://img.shields.io/badge/Status-Production%20Ready-green?style=for-the-badge" />
 </div>
 
-<div align="center" style="margin-top: 2rem;">
-  <a href="http://lifevault-seven.vercel.app">
-    <img src="https://img.shields.io/badge/SEE%20LIVE%20DEMO-lifevault--seven.vercel.app-dc2626?style=for-the-badge&logo=vercel" height="40" />
-  </a>
-</div>
-
 ---
 
 ## 📚 Table of Contents
