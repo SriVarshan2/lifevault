@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-emergency: #f43f5e;
+  /* Rose-600 */
+  --color-emergency-deep: #9f1239;
+  /* Rose-900 */
+  --color-vault: #050507;
+  /* Deepest blue-black */
+  --color-panel: rgba(22, 22, 26, 0.7);
+  --color-glass: rgba(255, 255, 255, 0.03);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+
+  --font-family-header: 'Outfit', sans-serif;
+  --font-family-sans: 'Inter', sans-serif;
+
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: radial-gradient(circle at top center, #1a1a2e 0%, #050507 100%);
+    color: #e5e7eb;
+    font-family: 'Inter', sans-serif;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+
+  /* Premium Glass Cards */
+  .glass-card {
+    background: rgba(18, 18, 23, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  /* Sophisticated Inputs */
+  .input-field {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .input-field:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #f43f5e;
+    box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.3);
+  }
+
+  /* High-stakes Button */
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
+    color: white;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    padding: 1.1rem;
+    border-radius: 1.1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px -5px rgba(244, 63, 94, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px rgba(244, 63, 94, 0.5);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .btn-secondary {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    color: #f3f4f6;
+    font-weight: 600;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+/* Sophisticated Triage priority badges */
+.priority-critical {
+  @apply bg-red-500/10 border border-red-500/30 text-red-400;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+}
+
+/* Modern Typography Classes */
+.h-header {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #f43f5e 0%, #fff 50%, #f43f5e 100%);
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Custom indicator pulsing */
+@keyframes soft-pulse {
+
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.soft-pulse {
+  animation: soft-pulse 2s ease-in-out infinite;
+}

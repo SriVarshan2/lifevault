@@ -1,0 +1,43 @@
+{
+    "name": "LifeVault",
+    "short_name": "LifeVault",
+    "description": "Your Emergency Brain — offline-first medical ID app.",
+    "start_url": "/medical-id",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#0a0a0a",
+    "orientation": "portrait",
+    "categories": [
+        "medical",
+        "health",
+        "emergency"
+    ],
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Medical ID",
+            "short_name": "Emergency",
+            "description": "View your emergency medical ID instantly",
+            "url": "/medical-id",
+            "icons": [
+                {
+                    "src": "/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ]
+}

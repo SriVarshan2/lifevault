@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Emergency Medical ID – LifeVault</title>
+  <meta name="description" content="Your personal Emergency Medical ID. Scan or view critical health info instantly." />
+  <meta name="theme-color" content="#0d0d0d" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emergency: '#ef4444',
+            'emergency-dark': '#991b1b',
+            'emergency-glow': 'rgba(239, 68, 68, 0.3)',
+            vault: '#0d0d0d',
+            panel: '#1a1a1a',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'red-glow': '0 0 25px rgba(239, 68, 68, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Pulse animation for the emergency display */
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+      70%  { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0  rgba(239, 68, 68, 0); }
+    }
+    .pulse-ring { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+
+    /* Animate the save button on success */
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+    .pop { animation: pop 0.3s ease; }
+  </style>
+</head>
+
+<body class="bg-vault text-white font-sans min-h-screen">
+
+  <!-- ======================= DISPLAY MODE ======================= -->
+  <!-- This view is shown when the user has saved their data        -->
+  <div id="display-mode" class="hidden flex-col min-h-screen">
+
+    <!-- Top bar -->
+    <div class="flex items-center justify-between px-5 pt-6 pb-3">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-emergency" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.344l1.172-1.172a4 4 0 115.656 5.656L10 17.656l-6.828-6.828a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
+        <span class="text-sm font-bold tracking-widest text-gray-400 uppercase">LifeVault</span>
+      </div>
+      <button id="edit-btn" class="text-xs font-semibold text-gray-400 border border-gray-700 rounded-full px-3 py-1 hover:border-emergency hover:text-emergency transition-colors">
+        Edit
+      </button>
+    </div>
+
+    <!-- Emergency Banner -->
+    <div class="mx-4 mt-2 mb-4 bg-emergency/10 border border-emergency rounded-2xl px-5 py-3 text-center">
+      <p class="text-emergency font-black text-xs tracking-[0.2em] uppercase">🚨 Emergency Medical ID</p>
+      <p class="text-gray-400 text-xs mt-1">Show this to any first responder</p>
+    </div>
+
+    <!-- Primary Card: Name & Blood Type -->
+    <div class="mx-4 mb-4 bg-panel border border-red-900 rounded-3xl p-6 shadow-red-glow pulse-ring">
+      <p class="text-gray-500 text-xs uppercase tracking-widest mb-1">Patient Name</p>
+      <p id="display-name" class="text-3xl font-black text-white leading-tight mb-5"></p>
+
+      <div class="flex items-center justify-center bg-emergency/10 border border-emergency rounded-2xl py-5">
+        <div class="text-center">
+          <p class="text-gray-400 text-xs uppercase tracking-widest mb-1">Blood Type</p>
+          <p id="display-blood" class="text-7xl font-black text-emergency leading-none"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Allergies Card -->
+    <div class="mx-4 mb-4 bg-panel border border-gray-800 rounded-3xl p-6">
+      <p class="text-gray-500 text-xs uppercase tracking-widest mb-3">⚠️ Allergies</p>
+      <div id="display-allergies" class="flex flex-wrap gap-2"></div>
+      <p id="display-allergies-none" class="hidden text-gray-500 text-sm italic">No known allergies</p>
+    </div>
+
+    <!-- ICE Note -->
+    <div class="mx-4 mb-6 bg-panel border border-gray-800 rounded-3xl p-5 text-center">
+      <p class="text-gray-500 text-xs">In Case of Emergency, call ICE contacts in phone.</p>
+      <p class="text-gray-600 text-xs mt-1">Secured offline · LifeVault v1.0</p>
+    </div>
+  </div>
+
+
+  <!-- ======================= FORM MODE ======================= -->
+  <!-- Shown when no data is saved, or user clicks "Edit"        -->
+  <div id="form-mode" class="flex flex-col min-h-screen pb-10">
+
+    <!-- Header -->
+    <div class="px-5 pt-8 pb-4">
+      <div class="flex items-center gap-2 mb-1">
+        <svg class="w-6 h-6 text-emergency" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.344l1.172-1.172a4 4 0 115.656 5.656L10 17.656l-6.828-6.828a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
+        <h1 class="text-xl font-black tracking-tight">LifeVault</h1>
+      </div>
+      <p class="text-gray-500 text-sm">Your Emergency Medical ID — stored privately on this device.</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="mx-4 bg-panel border border-gray-800 rounded-3xl p-6 flex flex-col gap-5">
+
+      <!-- Name Field -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Full Name</label>
+        <input
+          id="input-name"
+          type="text"
+          placeholder="e.g. Jane Doe"
+          autocomplete="name"
+          class="w-full bg-vault border border-gray-700 text-white text-lg font-semibold rounded-xl px-4 py-3 focus:outline-none focus:border-emergency focus:ring-1 focus:ring-emergency transition-colors placeholder-gray-600"
+        />
+      </div>
+
+      <!-- Blood Type Field -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Blood Type</label>
+        <div class="grid grid-cols-4 gap-2" id="blood-type-selector">
+          <!-- Blood type buttons generated by JS -->
+        </div>
+      </div>
+
+      <!-- Allergies Field -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Known Allergies</label>
+        <textarea
+          id="input-allergies"
+          placeholder="e.g. Penicillin, Peanuts, Latex (separate by comma)"
+          rows="3"
+          class="w-full bg-vault border border-gray-700 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-emergency focus:ring-1 focus:ring-emergency transition-colors placeholder-gray-600 resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Save Button -->
+      <button
+        id="save-btn"
+        class="w-full bg-emergency hover:bg-emergency-dark text-white text-base font-black py-4 rounded-2xl transition-all shadow-red-glow active:scale-95 mt-1"
+      >
+        Save to Device
+      </button>
+
+      <p id="saved-msg" class="hidden text-center text-green-400 text-sm font-semibold">✓ Saved!</p>
+    </div>
+
+    <!-- iOS Shortcut Instructions -->
+    <div class="mx-4 mt-6 bg-panel border border-gray-800 rounded-3xl p-5">
+      <p class="text-xs font-black text-gray-300 uppercase tracking-widest mb-3">📱 Access From Lock Screen</p>
+
+      <div class="mb-4">
+        <p class="text-emergency text-xs font-bold uppercase tracking-wider mb-2">Method 1: iOS Shortcuts (Recommended)</p>
+        <ol class="text-gray-400 text-sm leading-7 list-decimal list-inside space-y-1">
+          <li>Open the <strong class="text-white">Shortcuts</strong> app on your iPhone.</li>
+          <li>Tap <strong class="text-white">+</strong> to create a new shortcut.</li>
+          <li>Tap <strong class="text-white">Add Action</strong> → search for <strong class="text-white">"Open URLs"</strong>.</li>
+          <li>Enter the URL of this page (e.g. your hosted link or local server URL).</li>
+          <li>Tap the shortcut name → <strong class="text-white">Add to Home Screen</strong>.</li>
+          <li>Go to <strong class="text-white">Settings → Accessibility → Touch → Back Tap</strong>.</li>
+          <li>Set <strong class="text-white">Triple Tap</strong> → choose your new shortcut.</li>
+        </ol>
+      </div>
+
+      <div class="border-t border-gray-700 pt-4">
+        <p class="text-emergency text-xs font-bold uppercase tracking-wider mb-2">Method 2: iOS Accessibility</p>
+        <ol class="text-gray-400 text-sm leading-7 list-decimal list-inside space-y-1">
+          <li>Go to <strong class="text-white">Settings → Accessibility → Guided Access</strong>.</li>
+          <li>Alternatively: <strong class="text-white">Settings → Accessibility → Shortcuts</strong>.</li>
+          <li>Set the shortcut to open Safari with this page's URL.</li>
+          <li>Triple-click the side button to trigger it from the lock screen.</li>
+        </ol>
+      </div>
+
+      <div class="border-t border-gray-700 pt-4 mt-2">
+        <p class="text-emergency text-xs font-bold uppercase tracking-wider mb-2">Tip: Add to Home Screen</p>
+        <p class="text-gray-400 text-sm">In Safari, tap the <strong class="text-white">Share icon →</strong> <strong class="text-white">Add to Home Screen</strong>. This creates an icon on your home screen that launches directly to this page — no URL bar.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================= JAVASCRIPT ======================= -->
+  <script>
+    const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+    let selectedBloodType = '';
+
+    /* ---- Build Blood Type Selector Buttons ---- */
+    const selector = document.getElementById('blood-type-selector');
+    BLOOD_TYPES.forEach(type => {
+      const btn = document.createElement('button');
+      btn.textContent = type;
+      btn.dataset.type = type;
+      btn.className = 'blood-btn bg-vault border border-gray-700 text-white font-bold py-3 rounded-xl text-sm transition-all active:scale-95';
+      btn.addEventListener('click', () => selectBlood(type));
+      selector.appendChild(btn);
+    });
+
+    function selectBlood(type) {
+      selectedBloodType = type;
+      document.querySelectorAll('.blood-btn').forEach(btn => {
+        const isSelected = btn.dataset.type === type;
+        btn.className = `blood-btn font-bold py-3 rounded-xl text-sm transition-all active:scale-95 border ${
+          isSelected
+            ? 'bg-emergency border-emergency text-white shadow-red-glow'
+            : 'bg-vault border-gray-700 text-gray-300 hover:border-gray-500'
+        }`;
+      });
+    }
+
+    /* ---- Load stored data into the form ---- */
+    function loadFromStorage() {
+      const stored = JSON.parse(localStorage.getItem('lifevault_profile') || 'null');
+      if (stored) {
+        document.getElementById('input-name').value = stored.name || '';
+        document.getElementById('input-allergies').value = stored.allergies || '';
+        if (stored.bloodType) selectBlood(stored.bloodType);
+      }
+      return stored;
+    }
+
+    /* ---- Show the emergency display mode ---- */
+    function showDisplayMode(data) {
+      document.getElementById('form-mode').classList.add('hidden');
+      document.getElementById('display-mode').classList.remove('hidden');
+      document.getElementById('display-mode').classList.add('flex');
+
+      document.getElementById('display-name').textContent = data.name || 'Unknown';
+      document.getElementById('display-blood').textContent = data.bloodType || '?';
+
+      const allergiesEl = document.getElementById('display-allergies');
+      const allergiesNone = document.getElementById('display-allergies-none');
+      allergiesEl.innerHTML = '';
+      const rawAllergies = (data.allergies || '').split(',').map(a => a.trim()).filter(Boolean);
+      if (rawAllergies.length === 0) {
+        allergiesNone.classList.remove('hidden');
+      } else {
+        allergiesNone.classList.add('hidden');
+        rawAllergies.forEach(a => {
+          const tag = document.createElement('span');
+          tag.textContent = a;
+          tag.className = 'bg-emergency/10 border border-emergency/50 text-emergency text-sm font-semibold px-3 py-1 rounded-full';
+          allergiesEl.appendChild(tag);
+        });
+      }
+    }
+
+    /* ---- Show the form/edit mode ---- */
+    function showFormMode() {
+      document.getElementById('display-mode').classList.add('hidden');
+      document.getElementById('display-mode').classList.remove('flex');
+      document.getElementById('form-mode').classList.remove('hidden');
+    }
+
+    /* ---- Save button handler ---- */
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const name = document.getElementById('input-name').value.trim();
+      const allergies = document.getElementById('input-allergies').value.trim();
+
+      if (!name) {
+        document.getElementById('input-name').focus();
+        document.getElementById('input-name').classList.add('border-emergency');
+        return;
+      }
+
+      const profile = { name, bloodType: selectedBloodType, allergies };
+      localStorage.setItem('lifevault_profile', JSON.stringify(profile));
+
+      // Show pop animation
+      const saveBtn = document.getElementById('save-btn');
+      saveBtn.classList.add('pop');
+      setTimeout(() => saveBtn.classList.remove('pop'), 300);
+
+      // Show saved message briefly, then switch to display
+      const savedMsg = document.getElementById('saved-msg');
+      savedMsg.classList.remove('hidden');
+      setTimeout(() => showDisplayMode(profile), 800);
+    });
+
+    /* ---- Edit button handler ---- */
+    document.getElementById('edit-btn').addEventListener('click', showFormMode);
+
+    /* ---- On page load: decide which mode to show ---- */
+    const stored = loadFromStorage();
+    if (stored && stored.name) {
+      showDisplayMode(stored);
+    } else {
+      showFormMode();
+    }
+  </script>
+</body>
+</html>
